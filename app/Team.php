@@ -17,9 +17,15 @@ class Team extends Model
         $this->members()->$method($user);
     }
 
-    public function remove(User $user)
+    public function remove($user = null)
     {
-        $user->update(['team_id' => null]);
+        if ($user instanceof User) {
+            return $user->update(['team_id' => null]);
+        }
+
+        foreach ($user as $singleUser) {
+            $this->remove($singleUser);
+        }
     }
 
     public function purge()
